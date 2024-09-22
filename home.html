@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel="stylesheet" href="stylesheet1.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <h2>Products</h2>
+    <div class="row" id="product-list"></div>
+  </div>
+
+  <script>
+    const products = [
+      { id: 1, name: 'Product 1', description: 'Description of product 1', price: 100, image: '1.jpg' },
+      { id: 2, name: 'Product 2', description: 'Description of product 2', price: 200, image: '2.jpg' },
+      { id: 3, name: 'Product 3', description: 'Description of product 3', price: 300, image: '3.jpg' }
+    ];
+
+    function loadProducts() {
+      const productList = document.getElementById('product-list');
+      productList.innerHTML = '';
+      
+      products.forEach(product => {
+        const productHtml = `
+          <div class="col-md-4">
+            <div class="card">
+              <img src="${product.image}" class="card-img-top" alt="${product.name}">
+              <div class="card-body">
+                <h5 class="card-title">${product.name}</h5>
+                <p class="card-text">${product.description}</p>
+                <p class="card-text">Price: $${product.price}</p>
+                <button class="btn btn-primary" onclick="addToCart(${product.id})">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        `;
+        productList.innerHTML += productHtml;
+      });
+    }
+
+    function addToCart(id) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const product = products.find(p => p.id === id);
+      cart.push(product);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('Product added to cart');
+    }
+
+    window.onload = function() {
+      const isLoggedIn = localStorage.getItem('loggedIn');
+      if (!isLoggedIn) {
+        window.location.href = 'login.html';
+      } else {
+        loadProducts();
+      }
+    };
+  </script>
+</body>
+</html>
